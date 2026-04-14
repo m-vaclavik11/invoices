@@ -6,6 +6,7 @@ from ..models import Invoice
 from ..serializers import InvoiceSerializer
 from ..services.invoice_service import InvoiceService
 
+from datetime import datetime
 from django.db.models import Sum
 
 class InvoiceViewSet(viewsets.ModelViewSet):
@@ -46,12 +47,19 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["get"], url_path="statistics", url_name="invoice-statistics")
     def get_statistics(self, request):
-        all_time_sum = Invoice.objects.all().aggregate(
-            Sum("price")
-        )
+        queryset = Invoice.objects.all()
+
+        current_year = datetime.now().year
+        current_year_invoices = queryset.filter(issued__year=current_year)
+        current_year_sum = current_year_invoices.aggregate(Sum("price"))
+
+        all_time_sum = queryset.aggregate(Sum("price"))
+        inovice_count = queryset.count()
 
         return Response({
-            "allTimeSum": all_time_sum["price__sum"]
+            "currentYearSum": current_year_sum["price__sum"],
+            "allTimeSum": all_time_sum["price__sum"],
+            "invoicesCount": inovice_count
         })
 
 
