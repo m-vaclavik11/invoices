@@ -1,9 +1,12 @@
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from ..models import Invoice
 from ..serializers import InvoiceSerializer
 from ..services.invoice_service import InvoiceService
+
+from django.db.models import Sum
 
 class InvoiceViewSet(viewsets.ModelViewSet):
     queryset = Invoice.objects.all()
@@ -40,6 +43,17 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, methods=["get"], url_path="statistics", url_name="invoice-statistics")
+    def get_statistics(self, request):
+        all_time_sum = Invoice.objects.all().aggregate(
+            Sum("price")
+        )
+
+        return Response({
+            "allTimeSum": all_time_sum["price__sum"]
+        })
+
 
 
 
