@@ -52,3 +52,12 @@ class InvoiceSerializer(serializers.ModelSerializer):
         data['buyer'] = PersonSerializer(instance.buyer).data
 
         return data
+
+class PersonStatisticsSerializer(serializers.ModelSerializer):
+    personID = serializers.IntegerField(source="id")
+    personName = serializers.CharField(source="name")
+    revenue = serializers.IntegerField()
+
+    class Meta:
+        model = Person
+        fields = ["personID", "personName", "revenue"]

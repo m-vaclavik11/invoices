@@ -45,8 +45,13 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, methods=["get"], url_path="statistics", url_name="invoice-statistics")
+    @action(detail=False, methods=["get"], url_path="statistics", url_name="invoices-statistics")
     def get_statistics(self, request):
+        """
+        Displays sum of invoice price in current year, sum of all the years and number of invoices.
+        :param: GET http request
+        :return: http respond
+        """
         queryset = Invoice.objects.all()
 
         current_year = datetime.now().year
@@ -54,14 +59,13 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         current_year_sum = current_year_invoices.aggregate(Sum("price"))
 
         all_time_sum = queryset.aggregate(Sum("price"))
-        inovice_count = queryset.count()
+        invoice_count = queryset.count()
 
         return Response({
             "currentYearSum": current_year_sum["price__sum"],
             "allTimeSum": all_time_sum["price__sum"],
-            "invoicesCount": inovice_count
+            "invoicesCount": invoice_count
         })
-
 
 
 

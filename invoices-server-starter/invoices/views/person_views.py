@@ -1,8 +1,10 @@
+from django.db.models import Sum
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from ..serializers import PersonSerializer
-from ..serializers import Person
+from ..serializers import PersonSerializer, PersonStatisticsSerializer
+from ..models import Person
 
 
 class PersonViewSet(viewsets.ModelViewSet):
@@ -30,3 +32,18 @@ class PersonViewSet(viewsets.ModelViewSet):
         instance.hidden = True
         instance.save(update_fields=["hidden"])
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=False, methods=["get"], url_path="statistics", url_name="persons-statistics")
+    # detail = False znamená, že endpoint není navázaný na jeden objekt osoby
+    def get_statistics(self, request):
+        """
+        Displays persons id, name and their sum of invoice revenue for all the years
+        :param: GET http request
+        :return: serialized/JSON data according "PersonStatisticsSerializer"
+        """
+        queryset = Person.objects.all()
+        queryset = queryset.annotate(revenue=Sum("sellers_invoice__price"))
+
+        serializer = PersonStatisticsSerializer(queryset, many=True)
+        return Response(serializer.data)
+

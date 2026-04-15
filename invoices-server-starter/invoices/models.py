@@ -26,6 +26,8 @@ class Person(models.Model):
     note = models.TextField(blank=True, null=True)
     hidden = models.BooleanField(default=False, db_index=True)
 
+    objects = models.Manager()  # Aby PyCharm chápal třídu jako Django model a nehlásil chybu při Invoice.objects
+
 class Invoice(models.Model):
     """
     Model faktury, který reprezentuje jednotlivé sloupce v databázi.
@@ -33,8 +35,8 @@ class Invoice(models.Model):
     id = models.BigAutoField(primary_key=True)  # Explicitně definovaný primární klíč (tzv. tehnický primární klíč).
     # Byl definován kvůli změně původního primárního klíče přiřazeného k čísli faktury/invoiceNumber
     invoiceNumber = models.IntegerField(unique=True) # Číslo faktury chceme, aby bylo jedinečné
-    seller = models.ForeignKey(Person, on_delete=models.SET_NULL, related_name='seller_of_invoices', null=True)
-    buyer = models.ForeignKey(Person, on_delete=models.SET_NULL, related_name='buyer_of_invoices', null=True)
+    seller = models.ForeignKey(Person, on_delete=models.SET_NULL, related_name='sellers_invoice', null=True)
+    buyer = models.ForeignKey(Person, on_delete=models.SET_NULL, related_name='buyers_invoice', null=True)
     # Cizí klíče vytváří vazbu One to Many. Jeden dodvatel/odběratel může být na několika fakturách.
     # Pokud fakturu smažeme, nechceme, aby došlo ke smazání objektu osoby
     # Explicitně zadáno null = True kvůli on_delete.SET_NULL
@@ -44,7 +46,6 @@ class Invoice(models.Model):
     price = models.IntegerField()
     vat = models.IntegerField()
     note = models.CharField(max_length=300)
-
 
     objects = models.Manager() # Aby PyCharm chápal třídu jako Django model a nehlásil chybu při Invoice.objects
 
