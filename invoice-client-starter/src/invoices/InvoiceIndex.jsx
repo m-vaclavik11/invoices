@@ -44,8 +44,21 @@ const InvoiceIndex = () => {
     return (
         <div>
             
-            
             <form onSubmit={handlesubmit}>
+
+                <InputField
+                required={false}
+                type="text"
+                name="product"
+                min="2"
+                label="Produkt"
+                prompt="Zadejte název produktu"
+                value={filterState.product}
+                handleChange={(e) => {
+                    setFilter({...filterState, product: (e.target.value),});
+                }}
+                />            
+
                 <InputField
                 required={false}
                 type="number"
@@ -71,6 +84,19 @@ const InvoiceIndex = () => {
                     setFilter({...filterState, maxPrice: (e.target.value),});
                 }}
                 />
+
+                <InputField
+                required={false}
+                type="number"
+                name="limit"
+                min="1"
+                label="Limit zobrazení"
+                prompt="Zadejte limit pro zobrazení počtu faktur"
+                value={filterState.limit}
+                handleChange={(e) => {
+                    setFilter({...filterState, limit: (e.target.value),});
+                }}
+                />  
                 
                 <button type="submit">
                     Filtruj faktury
