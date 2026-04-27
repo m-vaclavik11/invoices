@@ -28,13 +28,13 @@ const InvoiceDetail = () => {
                 <h1>Detail faktury</h1>
                 <hr/>
                 <h3>{invoice.invoiceNumber} ({invoice._id})</h3>
-                <p><strong>Issued by:</strong>{invoice.seller?.name} TO DO</p>
-                <p><strong>Issued to:</strong> {invoice.buyer?.name} TO DO</p>
-                <p>Due Date: {invoice.dueDate}</p>
-                <p>Product: {invoice.product}</p>
-                <p>Price: {invoice.price} Kč</p>
-                <p>VAT: {invoice.vat}</p>
-                <p>Note: {invoice.note}</p>
+                <p><strong>Dodavatel:</strong>{invoice.seller?.name} TO DO</p>
+                <p><strong>Odběratel:</strong> {invoice.buyer?.name} TO DO</p>
+                <p>Zaplatit do: {invoice.dueDate}</p>
+                <p>Položky: {invoice.product}</p>
+                <p>Cena: {invoice.price} Kč</p>
+                <p>DPH: {invoice.vat}</p>
+                <p>Poznámky: {invoice.note}</p>
             </div>
         </>
     );
