@@ -57,7 +57,7 @@ export function App() {
 
         <Routes>
           <Route index element={<Navigate to={"/persons"} />} />
-          <  Route path="/persons">
+          <Route path="/persons">
             <Route index element={<PersonIndex />} />
             <Route path="show/:id" element={<PersonDetail />} />
             <Route path="create" element={<PersonForm />} />
