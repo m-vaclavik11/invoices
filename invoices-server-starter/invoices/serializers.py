@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Person, Invoice
+from .models import Person, Invoice, StockItem
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -61,3 +61,10 @@ class PersonStatisticsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
         fields = ["personID", "personName", "revenue"]
+
+class StockItemsSerializer(serializers.ModelSerializer):
+    _id = serializers.IntegerField(source="id", read_only=True)
+
+    class Meta:
+        model = StockItem
+        fields = ["_id", "name", "quantity" "unit", "note"]

@@ -1,5 +1,5 @@
 /*
-Vymaže fakturu
+Vymaže a vyfiltruje fakturu 
 */
 
 import React, {useEffect, useState} from "react";

@@ -49,6 +49,13 @@ class Invoice(models.Model):
 
     objects = models.Manager() # Aby PyCharm chápal třídu jako Django model a nehlásil chybu při Invoice.objects
 
+class StockItem(models.Model):
+    name = models.CharField(db_index=True)
+    quantity = models.IntegerField()
+    unit = models.CharField(max_length=3)
+    note = models.CharField(max_length=250)
+
+
 
 
 
